@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Paging</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+
+		<link rel="stylesheet" href="__PUBLIC__/starCMS/plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="__PUBLIC__/starCMS/css/global.css" media="all">
+		<link rel="stylesheet" href="__PUBLIC__/starCMS/plugins/font-awesome/css/font-awesome.min.css">
+	</head>
+
+	<body>
+		<div style="margin: 15px;">
+            <div class="layui-tab">
+              <ul class="layui-tab-title">
+                <li class="layui-this">接口设置</li>
+                <li>用户管理</li>
+                <li>权限分配</li>
+                <li>商品管理</li>
+                <li>订单管理</li>
+              </ul>
+              <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                	<form class="layui-form" action="">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">通用密钥</label>
+                            <div class="layui-input-inline">
+                                <input name="site_api_key" lay-verify="key" placeholder="abcdefghijk123456" autocomplete="off" class="layui-input" value="{$site_setting.site_api_key}" type="text">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">请填写 全站接口的通用签名密钥</div>
+                        </div>
+                        
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">签名方式</label>
+                            <div class="layui-input-inline">
+                                <select name="site_sign_type">
+                                    <option value="">请选择接口签名方式</option>
+                                    <option value="md5" <if condition="$site_setting.site_sign_type eq 'md5'">selected=""</if>>MD5</option>
+                                    <option value="sha256" <if condition="$site_setting.site_sign_type eq 'sha256'">selected=""</if>>SHA256</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit="" lay-filter="site">保存配置</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="layui-tab-item">内容2</div>
+                <div class="layui-tab-item">内容3</div>
+                <div class="layui-tab-item">内容4</div>
+                <div class="layui-tab-item">内容5</div>
+              </div>
+            </div>
+			<!--<fieldset class="layui-elem-field">
+				<legend>方法</legend>
+				<div class="layui-field-box">
+					<table class="layui-table">
+						<thead>
+							<tr>
+								<th>名称</th>
+								<th>参数说明</th>
+								<th>描述</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td style="text-align: center;">exists</td>
+								<td style="text-align: center;">
+									<p>参数名：title</p>
+									<p>类型：string</p>
+								</td>
+								<td>
+									<p>检索tab选择卡是否存在，如果存在则返回索引值，不存在返回-1</p>
+									<p>示例</p>
+									<p>
+										<pre class="layui-code">
+                                            var index = tab.exists('用户中心');
+                                            //e.g. 
+                                            //result:1
+										</pre>
+									</p>
+								</td>
+							</tr>
+							<tr>
+								<td style="text-align: center;">getTabId</td>
+								<td style="text-align: center;">
+									<p>参数名：title</p>
+									<p>类型：string</p>
+								</td>
+								<td>
+									<p>获取tab选项卡id</p>
+									<p>示例</p>
+									<p>
+										<pre class="layui-code">
+                                            var id = tab.getTabId('用户中心');		
+                                            //e.g. 
+                                            //result:1488434851738
+										</pre>
+									</p>
+								</td>
+							</tr>
+							<tr>
+								<td style="text-align: center;">tabAdd</td>
+								<td style="text-align: center;">
+									<p>参数名：data</p>
+									<p>类型：object</p>
+								</td>
+								<td>
+									<p>参数说明</p>
+									<p>data.href //需要加载的地址</p>
+									<p>data.icon //图标</p>
+									<p>data.title //标题</p>
+									<br/>
+									<p>添加一个tab选择卡，如果tab选择卡存在则获取焦点</p>
+									<p>示例</p>
+									<p>
+										<pre class="layui-code">
+                                            var id = tab.tabAdd({
+                                                href:'http://fly.zhengjinfan.cn/',
+                                                icon:'fa-user',
+                                                title:'百度'
+                                            });
+										</pre>
+									</p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</fieldset>-->
+		</div>
+        
+        <script type="text/javascript" src="__PUBLIC__/starCMS/js/jquery.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/starCMS/plugins/layui/layui.js"></script>
+        <script>
+			//注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+			layui.use(['form', 'element'], function() {
+				var element = layui.element();
+				var form = layui.form(),
+					layer = layui.layer,
+					layedit = layui.layedit,
+					laydate = layui.laydate;
+				//验证规则
+				form.verify({
+					key: function(value) {
+						if(value.length == 0) {
+							return '接口密钥不能为空';
+						}
+					}
+				});
+				//监听提交
+				form.on('submit(site)', function(data) {
+					$.ajax({
+						'url':'{:U("Setting/save_site")}',
+						'type':'POST',
+						'data':(data.field),
+						'dateType':'json',
+						'success':function(data){
+							//console.log(typeof data);
+							layer.alert(data.msg, {
+								title: '提示'
+							})
+						}	
+					});
+					return false;
+				});
+			});
+		</script>
+	</body>
+
+</html>

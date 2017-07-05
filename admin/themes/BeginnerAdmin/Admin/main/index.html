@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="__PUBLIC__/starCMS/plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="__PUBLIC__/starCMS/css/main.css" />
+	</head>
+
+	<body>
+		<div class="admin-main">
+			
+            <fieldset class="layui-elem-field">
+				<legend>系统信息</legend>
+				<div class="layui-field-box layui-form">
+					<table class="layui-table admin-table" lay-even lay-skin="nob">
+						<tbody id="content">
+                        	<volist name="server_info" id="vo">
+                                <tr> 
+                                     <td>{$key}</td> <td>{$vo}</td>
+                                </tr>
+                            </volist>
+                        </tbody>
+					</table>
+				</div>
+			</fieldset>
+			
+		</div>
+	</body>
+
+</html>
