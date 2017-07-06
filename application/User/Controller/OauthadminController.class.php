@@ -132,6 +132,19 @@ class OauthadminController extends AdminbaseController {
 	
 	//添加虚拟推广用户
 	public function addSpreadUser(){
-		//	
+		$spreadUserDataArr = array(
+			'type'=>10,
+			'create_time'=>date('Y-m-d H:i:s',time()),
+			'create_ip'=>get_client_ip(),
+			'status'=>1,
+			'unionid'=>md5(time().mt_rand(10000,99999))
+		);
+		$oauthUserMdl = M('oauthUser');
+		$addResult = $oauthUserMdl->add($spreadUserDataArr);
+		if($addResult){
+			echo json_encode(array('status'=>1,'msg'=>'添加成功','spreadUserId'=>$addResult),JSON_UNESCAPED_UNICODE);
+		} else {
+			echo json_encode(array('status'=>-1,'msg'=>'添加失败'),JSON_UNESCAPED_UNICODE);
+		}
 	}
 }
