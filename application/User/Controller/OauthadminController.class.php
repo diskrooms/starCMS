@@ -132,8 +132,13 @@ class OauthadminController extends AdminbaseController {
 	
 	//添加虚拟推广用户
 	public function addSpreadUser(){
+		$spreadChannelName = I('spreadChannelName','','trim,addslashes');
+		if(empty($spreadChannelName)){
+			exit(json_encode(array('status'=>0,'msg'=>'参数有误'),JSON_UNESCAPED_UNICODE));
+		}
 		$spreadUserDataArr = array(
 			'type'=>10,
+			'nickname'=>$spreadChannelName,
 			'create_time'=>date('Y-m-d H:i:s',time()),
 			'create_ip'=>get_client_ip(),
 			'status'=>1,
@@ -147,4 +152,42 @@ class OauthadminController extends AdminbaseController {
 			echo json_encode(array('status'=>-1,'msg'=>'添加失败'),JSON_UNESCAPED_UNICODE);
 		}
 	}
+	
+	//删除用户
+	public function delUser(){
+		$uid = I('uid','','intval');
+		if(empty($uid)){
+			exit(json_encode(array('status'=>0,'msg'=>'参数有误'),JSON_UNESCAPED_UNICODE));
+		}
+		$oauthUserMdl = M('oauthUser');
+		$result = $oauthUserMdl->where('id='.$uid)->delete();
+		if($result > 0){
+			echo json_encode(array('status'=>1,'msg'=>'删除成功'),JSON_UNESCAPED_UNICODE);
+		} else {
+			if($result === 0){
+				echo json_encode(array('status'=>0,'msg'=>'没有可删除的记录'),JSON_UNESCAPED_UNICODE);
+			} elseif($result === false){
+				echo json_encode(array('status'=>-1,'msg'=>'删除出错'),JSON_UNESCAPED_UNICODE);
+			} else {
+				echo json_encode(array('status'=>-2,'msg'=>'其他错误'),JSON_UNESCAPED_UNICODE);
+			}
+		}
+	}
+	
+	//返送单条用户记录
+	public function userInfo(){
+		$uid = I('uid','','intval');
+		if(empty($uid)){
+			exit(json_encode(array('status'=>-1,'msg'=>'参数有误'),JSON_UNESCAPED_UNICODE));
+		}
+		$oauthUserMdl = M('oauthUser');
+		$userInfo = $oauthUserMdl->where('id='.$uid)->find();
+		if(empty($userInfo)){
+			echo json_encode(array('status'=>0,'msg'=>'没有找到相关用户'),JSON_UNESCAPED_UNICODE);
+		} else {
+			echo json_encode(array('status'=>1,'msg'=>'返送成功','data'=>$userInfo),JSON_UNESCAPED_UNICODE);
+		}
+	}
+	
+	//编辑用户
 }

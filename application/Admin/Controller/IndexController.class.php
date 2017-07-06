@@ -23,14 +23,16 @@ class IndexController extends AdminbaseController {
     	//$menus = D("Common/Menu")->menu_json();
 		//dump($menus);
 		//exit();
-		$emptyMdl = M();
-		$menus = $emptyMdl->query("SELECT id,path,name as title,icon,app,model,action FROM cmf_menu WHERE status=1 ORDER BY path");
+		$menuMdl = M('Menu');
+		$menus = $menuMdl->field("id,path,name as title,icon,app,model,action")->where("status=1")->order("path ASC")->select();
+		//echo $menuMdl->getLastSQL();
 		//dump($menus);
 		//exit();
 		$_tree_arr = array();
 		foreach($menus as $menu){
 			$path = explode('-',$menu['path']);
 			$menu['href'] = $menu['app'].'/'.$menu['model'].'/'.$menu['action'];
+			//dump($path);
 			$_tree_arr = $this->addLeaf($_tree_arr,$path,$menu);
 		}
 		if($_GET['debug'] == 1){
@@ -144,14 +146,17 @@ class IndexController extends AdminbaseController {
 	
 	//
 	public function menuPath(){
-		$emptyMdl = M();
-		$menus = $emptyMdl->query("SELECT id,parentid FROM cmf_menu ORDER BY id ASC");
+		$menuMdl = M('Menu');
+		//$menus = $menuMdl->query("SELECT id,parentid FROM cmf_menu ORDER BY id ASC");
+		$menus =  $menuMdl->field('id,parentid')->order('id ASC')->select();
+		//dump($menus);
+		//exit();
 		foreach($menus as $menu){
 			if($menu['parentid'] == 0){
-				$emptyMdl->execute("UPDATE cmf_menu SET path='".$menu['id']."' WHERE id=".$menu['id']);	
+				$emptyMdl->execute("UPDATE starcms_menu SET path='".$menu['id']."' WHERE id=".$menu['id']);	
 			} else {
-				$parentid = $emptyMdl->query("SELECT path FROM cmf_menu WHERE id=".$menu['parentid']);
-				$emptyMdl->execute("UPDATE cmf_menu SET path='".$parentid[0]['path'].'-'.$menu['id']."' WHERE id=".$menu['id']);
+				$parentid = $emptyMdl->query("SELECT path FROM starcms_menu WHERE id=".$menu['parentid']);
+				$emptyMdl->execute("UPDATE starcms_menu SET path='".$parentid[0]['path'].'-'.$menu['id']."' WHERE id=".$menu['id']);
 			}
 		}
 	}

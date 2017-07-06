@@ -56,6 +56,17 @@ class MenuController extends AdminbaseController {
 				</tr>";
         $categorys = $tree->get_tree(0, $str);
         $this->assign("categorys", $categorys);
+		
+		$parentid = I("get.parentid",0,'intval');
+    	$result = $this->menu_model->order(array("listorder" => "ASC"))->select();
+    	foreach ($result as $r) {
+    		$r['selected'] = $r['id'] == $parentid ? 'selected' : '';
+    		$array[] = $r;
+    	}
+		$str = "<option value='\$id' \$selected>\$spacer \$name</option>";
+    	$tree->init($array);
+    	$select_categorys = $tree->get_tree(0, $str);
+    	$this->assign("select_categorys", $select_categorys);
         $this->display();
     }
     
